@@ -15,11 +15,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        User::factory()->create([
+            'name' => 'Admin User',
+            'email' => 'admin@gmail.com',
+            'password' => '123456',
+            'role' => 'admin'
+        ]);
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Standard User',
+            'email' => 'user!@gmail.com',
+            'password' => '123456',
+            'role' => 'customer'
         ]);
+
+        \App\Models\Service::create(['name' => 'Hair Cut', 'price' => 25.00, 'duration' => 30]);
+        \App\Models\Service::create(['name' => 'Hair Coloring', 'price' => 80.00, 'duration' => 90]);
+        \App\Models\Service::create(['name' => 'Facial', 'price' => 50.00, 'duration' => 60]);
+        \App\Models\Service::create(['name' => 'Manicure', 'price' => 20.00, 'duration' => 30]);
     }
 }
