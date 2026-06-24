@@ -21,6 +21,13 @@ class BookingController extends Controller
         $date = $request->date;
         $service = Service::find($request->service_id);
 
+        $dateObj = Carbon::parse($date);
+        
+        // Check if Sunday
+        if ($dateObj->isSunday()) {
+            return response()->json(['message' => 'The salon is closed on Sundays.', 'slots' => []]);
+        }
+
         // Check if date is blocked
         if (BlockedDate::where('date', $date)->exists()) {
             return response()->json(['message' => 'This date is blocked.', 'slots' => []]);
@@ -62,6 +69,10 @@ class BookingController extends Controller
             'booking_date' => 'required|date|after_or_equal:today',
             'start_time' => 'required',
         ]);
+
+        if (Carbon::parse($request->booking_date)->isSunday()) {
+            return back()->withErrors(['booking_date' => 'The salon is closed on Sundays.']);
+        }
 
         // Double check availability (real-time)
         $exists = Booking::where('booking_date', $request->booking_date)

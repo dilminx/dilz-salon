@@ -198,6 +198,68 @@
         </style>
     </section>
 
+    <!-- Our Story (Interactive) -->
+    <section id="about" class="py-40 bg-white overflow-hidden" x-data="{ activeMilestone: 2018 }">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col lg:flex-row items-center gap-20">
+                <!-- Visual Content -->
+                <div class="w-full lg:w-1/2 relative">
+                    <div class="relative z-10 rounded-[3rem] overflow-hidden shadow-2xl">
+                        <img src="{{ asset('images/founder.png') }}" alt="Our Founder" class="w-full aspect-[4/5] object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 to-transparent flex items-bottom p-12">
+                            <div class="mt-auto">
+                                <h4 class="text-white text-3xl font-bold mb-2">Elena Vance</h4>
+                                <p class="text-stone-300 font-outfit uppercase tracking-widest text-sm">Founder & Creative Director</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Accent elements -->
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-accent rounded-full opacity-10 animate-pulse"></div>
+                    <div class="absolute -bottom-10 -left-10 w-64 h-64 border border-accent/20 rounded-full"></div>
+                </div>
+
+                <!-- Textual Content -->
+                <div class="w-full lg:w-1/2">
+                    <span class="text-accent uppercase tracking-[0.4em] text-[10px] mb-6 block font-bold">Behind the Glow</span>
+                    <h2 class="text-6xl mb-10 leading-tight">Elevating Beauty <br> <span class="italic font-light">to an Art Form.</span></h2>
+                    
+                    <p class="text-stone-500 text-lg mb-12 leading-relaxed">
+                        Founded with a simple vision: to create a sanctuary where sophisticated style meets uncompromising comfort. We don't just provide services; we craft experiences that linger long after you leave our chair.
+                    </p>
+
+                    <!-- Interactive Milestones -->
+                    <div class="space-y-8">
+                        <div class="flex space-x-6 border-b border-stone-100 pb-4 overflow-x-auto no-scrollbar">
+                            <button @click="activeMilestone = 2018" :class="activeMilestone === 2018 ? 'text-stone-900 border-accent font-bold' : 'text-stone-400 border-transparent'" class="pb-2 border-b-2 text-sm uppercase tracking-widest transition-all">2018</button>
+                            <button @click="activeMilestone = 2020" :class="activeMilestone === 2020 ? 'text-stone-900 border-accent font-bold' : 'text-stone-400 border-transparent'" class="pb-2 border-b-2 text-sm uppercase tracking-widest transition-all">2020</button>
+                            <button @click="activeMilestone = 2022" :class="activeMilestone === 2022 ? 'text-stone-900 border-accent font-bold' : 'text-stone-400 border-transparent'" class="pb-2 border-b-2 text-sm uppercase tracking-widest transition-all">2022</button>
+                            <button @click="activeMilestone = 2024" :class="activeMilestone === 2024 ? 'text-stone-900 border-accent font-bold' : 'text-stone-400 border-transparent'" class="pb-2 border-b-2 text-sm uppercase tracking-widest transition-all">Today</button>
+                        </div>
+                        
+                        <div class="min-h-[120px]">
+                            <div x-show="activeMilestone === 2018" x-transition.opacity>
+                                <h5 class="text-accent font-semibold mb-2">The Humble Beginning</h5>
+                                <p class="text-stone-500 leading-relaxed italic">Opened our first boutique studio in the heart of Colombo with just 2 Master Artists and a passion for luxury hair care.</p>
+                            </div>
+                            <div x-show="activeMilestone === 2020" x-transition.opacity>
+                                <h5 class="text-accent font-semibold mb-2">Award Winning Recognition</h5>
+                                <p class="text-stone-500 leading-relaxed italic">Recognized as the 'Best Boutique Salon' for our innovative approach to organic hair products and service excellence.</p>
+                            </div>
+                            <div x-show="activeMilestone === 2022" x-transition.opacity>
+                                <h5 class="text-accent font-semibold mb-2">Expanding the Aura</h5>
+                                <p class="text-stone-500 leading-relaxed italic">Transformed into a flagship luxury salon spanning 3000 sq.ft, introducing world-class skin and body rejuvenation therapies.</p>
+                            </div>
+                            <div x-show="activeMilestone === 2024" x-transition.opacity>
+                                <h5 class="text-accent font-semibold mb-2">Defining the Future</h5>
+                                <p class="text-stone-500 leading-relaxed italic">Launching our exclusive digital booking ecosystem and partnering with global luxury brands to bring 5-star artistry home.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Appointment Quote -->
     <section class="py-40 bg-white text-center relative px-6 overflow-hidden">
         <div class="max-w-4xl mx-auto">

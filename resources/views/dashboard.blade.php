@@ -71,7 +71,7 @@
                                 </div>
 
                                 <div x-show="loading" class="text-sm text-gray-500 italic">Checking availability...</div>
-                                <div x-show="!loading && date && serviceId && slots.length === 0" class="text-sm text-red-500">No slots available for this date.</div>
+                                <div x-show="!loading && date && serviceId && slots.length === 0" class="text-sm text-red-500" x-text="message || 'No slots available for this date.'"></div>
 
                                 <button type="submit" :disabled="!date || !serviceId" 
                                         class="w-full py-4 bg-stone-900 text-white rounded-full font-semibold hover:bg-stone-800 disabled:opacity-50 transition">
@@ -136,16 +136,19 @@
                 serviceId: '',
                 date: '',
                 slots: [],
+                message: '',
                 loading: false,
                 fetchSlots() {
                     if (!this.serviceId || !this.date) return;
                     this.loading = true;
                     this.slots = [];
+                    this.message = '';
                     
                     fetch(`/available-slots?date=${this.date}&service_id=${this.serviceId}`)
                         .then(res => res.json())
                         .then(data => {
                             this.slots = data.slots || [];
+                            this.message = data.message || '';
                             this.loading = false;
                         })
                         .catch(() => {
