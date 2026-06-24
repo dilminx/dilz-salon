@@ -14,11 +14,15 @@ class BookingController extends Controller
     public function getAvailableSlots(Request $request)
     {
         $request->validate([
-            'date' => 'required|date|after_or_equal:today',
+            'date' => 'required|date|after:today',
             'service_id' => 'required|exists:services,id'
         ]);
 
         $date = $request->date;
+        
+        if (Carbon::parse($date)->isToday()) {
+            return response()->json(['message' => 'Same-day bookings are not allowed. Please book at least 24 hours in advance.', 'slots' => []]);
+        }
         $service = Service::find($request->service_id);
 
         $dateObj = Carbon::parse($date);
@@ -66,9 +70,13 @@ class BookingController extends Controller
     {
         $request->validate([
             'service_id' => 'required|exists:services,id',
-            'booking_date' => 'required|date|after_or_equal:today',
+            'booking_date' => 'required|date|after:today',
             'start_time' => 'required',
         ]);
+
+        if (Carbon::parse($request->booking_date)->isToday()) {
+            return back()->withErrors(['booking_date' => 'Same-day bookings are not allowed.']);
+        }
 
         if (Carbon::parse($request->booking_date)->isSunday()) {
             return back()->withErrors(['booking_date' => 'The salon is closed on Sundays.']);

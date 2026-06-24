@@ -52,7 +52,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Choose Date</label>
                                     <input type="date" name="booking_date" x-model="date" @change="fetchSlots()" 
-                                           min="{{ date('Y-m-d') }}"
+                                           min="{{ date('Y-m-d', strtotime('+1 day')) }}"
                                            class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-stone-500 outline-none">
                                 </div>
 
@@ -99,31 +99,42 @@
                             <p class="text-gray-400 italic">No upcoming appointments.</p>
                         @endforelse
 
-                        <h2 class="text-xl font-bold uppercase tracking-widest text-xs text-gray-400 mt-12">Past History</h2>
-                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-                            <table class="w-full text-left text-sm">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="p-4">Service</th>
-                                        <th class="p-4">Date</th>
-                                        <th class="p-4">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($pastBookings as $booking)
-                                        <tr class="border-t border-gray-100">
-                                            <td class="p-4">{{ $booking->service->name }}</td>
-                                            <td class="p-4">{{ $booking->booking_date }}</td>
-                                            <td class="p-4 capitalize">
-                                                <span class="{{ $booking->status === 'cancelled' ? 'text-red-500' : 'text-green-500' }}">
-                                                    {{ $booking->status }}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                        <h2 class="text-xs font-bold uppercase tracking-widest text-gray-400 mt-12 mb-4">Past History</h2>
+                        @forelse($pastBookings as $booking)
+                            <div class="bg-white rounded-2xl border border-gray-100 p-5 flex justify-between items-center mb-3">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 rounded-xl flex items-center justify-center
+                                        {{ $booking->status === 'cancelled' ? 'bg-red-50 text-red-400' : 'bg-green-50 text-green-500' }}">
+                                        @if($booking->status === 'cancelled')
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                        @else
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-gray-800">{{ $booking->service->name }}</p>
+                                        <p class="text-xs text-gray-400 mt-0.5">
+                                            {{ \Carbon\Carbon::parse($booking->booking_date)->format('D, M d Y') }}
+                                            &bull; {{ \Carbon\Carbon::createFromFormat('H:i:s', $booking->start_time)->format('h:i A') }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-sm font-bold text-gray-700">${{ number_format($booking->service->price, 2) }}</span>
+                                    <div class="mt-1">
+                                        @if($booking->status === 'cancelled')
+                                            <span class="inline-block px-3 py-1 bg-red-50 text-red-500 text-xs font-bold rounded-full uppercase tracking-wider">Cancelled</span>
+                                        @else
+                                            <span class="inline-block px-3 py-1 bg-green-50 text-green-600 text-xs font-bold rounded-full uppercase tracking-wider">Completed</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="bg-white rounded-2xl border border-dashed border-gray-200 p-10 text-center">
+                                <p class="text-gray-400 text-sm">No past appointments yet.</p>
+                            </div>
+                        @endforelse
                     </div>
                 </div>
             </div>

@@ -18,15 +18,26 @@ class DashboardController extends Controller
 
         $upcomingBookings = $user->bookings()
             ->with('service')
-            ->where('booking_date', '>=', now()->toDateString())
             ->where('status', 'confirmed')
+            ->where(function($query) {
+                $query->where('booking_date', '>', now()->toDateString())
+                      ->orWhere(function($sub) {
+                          $sub->where('booking_date', now()->toDateString())
+                              ->where('start_time', '>=', now()->format('H:i'));
+                      });
+            })
             ->get();
 
         $pastBookings = $user->bookings()
             ->with('service')
             ->where(function ($query) {
                 $query->where('booking_date', '<', now()->toDateString())
-                      ->orWhere('status', 'cancelled');
+                      ->orWhere('status', 'cancelled')
+                      ->orWhere(function($sub) {
+                          $sub->where('booking_date', now()->toDateString())
+                              ->where('start_time', '<', now()->format('H:i'))
+                              ->where('status', 'confirmed');
+                      });
             })
             ->get();
 
